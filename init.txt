@@ -1,0 +1,237 @@
+1. Download Anaconda : https://www.anaconda.com/download
+    $ sh Anaconda3-2023.07-2-Linux-x86_64.sh
+ 
+ 
+2. 安裝cuda
+    $ sudo apt-get remove --purge '^nvidia-.*'
+    $ sudo add-apt-repository ppa:graphics-drivers
+    $ sudo apt-get update
+    $ sudo apt-get install nvidia-driver-515
+    
+    $ sudo reboot
+    $ nvidia-smi
+    
+    * Download Run file from Nvidia cuda toolkit
+    $ sudo sh cuda_11.6.0_510.39.01_linux.run
+    $ sudo gedit ~/.bashrc
+    ==>
+        export CUDA_HOME="/usr/local/cuda-11.6"
+        export PATH="$CUDA_HOME/bin:$PATH"
+        export LD_LIBRARY_PATH="$CUDA_HOME/lib64:$LD_LIBRARY_PATH"
+        export CPATH="$CUDA_HOME/include:$CPATH"
+    $ source ~/.bashrc
+    $ nvcc
+    
+    * Download Tar file from cudnn page (cuDNN v8.4.1 (May 27th, 2022), for CUDA 11.x)
+     * unzip
+     $ mv (folderName) cuda
+     $ sudo cp cuda/include/cudnn*.h /usr/local/cuda-11.6/include
+     $ sudo cp -P cuda/lib/libcudnn* /usr/local/cuda-11.6/lib64
+     $ sudo chmod a+r /usr/local/cuda-11.6/include/cudnn*.h /usr/local/cuda-11.6/lib64/libcudnn*
+    #$ cat /usr/local/cuda-11.6/include/cudnn.h | grep CUDNN_MAJOR -A 2
+     $ ls /usr/local/cuda-11.8/lib64 | grep libcudnn.so
+
+
+
+
+ 
+2. OpenCV cuda install
+    * 將tar cp到~/docker_space/base
+    $ conda create --name cudacv python==3.8.10
+    $ sudo apt-get update
+    $ sudo apt-get install -y --no-install-recommends --fix-missing \
+      autoconf \
+      automake \
+      build-essential \
+      cmake \
+      git-core \
+      libass-dev \
+      libfreetype6-dev \
+      libgnutls28-dev \
+      libmp3lame-dev \
+      libsdl2-dev \
+      libtool \
+      libva-dev \
+      libvdpau-dev \
+      libvorbis-dev \
+      libxcb1-dev \
+      libxcb-shm0-dev \
+      libxcb-xfixes0-dev \
+      meson \
+      ninja-build \
+      pkg-config \
+      texinfo \
+      wget \
+      yasm \
+      zlib1g-dev \
+      libbz2-dev \
+      liblzma-dev \
+      git \
+      vim \
+      unzip \
+      nasm
+
+4.sudo apt-get install -y --no-install-recommends --fix-missing \
+      ninja-build \
+      build-essential \
+      dpkg-dev \
+      flex \
+      bison \
+      autotools-dev \
+      automake \
+      liborc-dev \
+      autopoint \
+      libtool \
+      gtk-doc-tools \
+      python3-pip \
+      valgrind \
+      libgirepository1.0-dev \
+      libcap-dev \
+      libgtk-3-dev \
+      libunwind-dev \
+      clzip \
+      gobject-introspection \
+      libdw-dev \
+      libxv-dev \
+      libasound2-dev \
+      libtheora-dev \
+      libogg-dev \
+      libvorbis-dev \
+      libbz2-dev \
+      libv4l-dev \
+      libvpx-dev \
+      libjack-jackd2-dev \
+      libsoup2.4-dev \
+      libpulse-dev \
+      faad \
+      libfaad-dev \
+      libfaac-dev \
+      libx264-dev \
+      libmad0-dev \
+      yasm
+
+
+
+pip3 uninstall opencv-python
+pip install meson==0.60.0
+pip install requests
+pip install numpy==1.23.1
+
+tar xvzf ffmpeg.tgz && cd ffmpeg/ &&  ./configure --enable-shared --prefix=/usr/local/ffmpeg && make && sudo make install
+cd ..
+tar xvf gmp-6.2.1.tar.lz && cd gmp-6.2.1/ &&  ./configure && make && sudo make install
+cd ..
+tar xvf gsl-latest.tar.gz && cd gsl-2.7.1/ &&  ./configure && make && sudo make install
+cd ..
+tar xvf gstreamer-1.19.2.tar.xz && cd gstreamer-1.19.2/ &&  meson build  && ninja -C build  && sudo ninja -C build install
+cd ..
+tar xvf gst-plugins-base-1.19.2.tar.xz && cd gst-plugins-base-1.19.2/ &&  meson build  && ninja -C build  && sudo ninja -C build install
+cd ..
+tar xvf gst-plugins-good-1.19.2.tar.xz && cd gst-plugins-good-1.19.2/ &&  meson build  && ninja -C build  && sudo ninja -C build install
+cd ..
+tar xvf gst-plugins-bad-1.19.2.tar.xz && cd gst-plugins-bad-1.19.2/ &&  meson build  && ninja -C build  && sudo ninja -C build install
+cd ..
+tar xvf gst-plugins-ugly-1.19.2.tar.xz && cd gst-plugins-ugly-1.19.2/ &&  meson build  && ninja -C build  && sudo ninja -C build install
+cd ..
+export PKG_CONFIG_PATH=$(pwd)/ffmpeg/libavfilter:$(pwd)/ffmpeg/libavdevice:$(pwd)/ffmpeg/libswscale:$(pwd)/ffmpeg/libavutil:$(pwd)/ffmpeg/libavformat:$(pwd)/ffmpeg/libavcodec:$(pwd)/ffmpeg/libswresample
+echo $PKG_CONFIG_PATH
+tar xvf gst-libav-1.19.2.tar.xz && cd gst-libav-1.19.2/ &&  meson build  && ninja -C build  && sudo ninja -C build install
+cd ..
+export PKG_CONFIG_PATH=$(pwd)/ffmpeg/libavfilter:$(pwd)/ffmpeg/libavdevice:$(pwd)/ffmpeg/libswscale:$(pwd)/ffmpeg/libavutil:$(pwd)/ffmpeg/libavformat:$(pwd)/ffmpeg/libavcodec:$(pwd)/ffmpeg/libswresample
+
+tar xvzf opencv.tgz && cd opencv/opencv-4.x/ && mkdir build
+cd ../..
+export PKG_CONFIG_PATH=$(pwd)/ffmpeg/libavfilter:$(pwd)/ffmpeg/libavdevice:$(pwd)/ffmpeg/libswscale:$(pwd)/ffmpeg/libavutil:$(pwd)/ffmpeg/libavformat:$(pwd)/ffmpeg/libavcodec:$(pwd)/ffmpeg/libswresample
+export CPLUS_INCLUDE_PATH=$CONDA_PREFIX/lib/python3.8
+
+
+cd opencv/opencv-4.x/build/
+
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
+-D CMAKE_INSTALL_PREFIX=$CONDA_PREFIX \
+-D INSTALL_PYTHON_EXAMPLES=ON \
+-D INSTALL_C_EXAMPLES=ON \
+-D BUILD_DOCS=OFF \
+-D BUILD_PERF_TESTS=OFF \
+-D BUILD_TESTS=OFF \
+-D BUILD_PACKAGE=OFF \
+-D BUILD_EXAMPLES=OFF \
+-D WITH_TBB=ON \
+-D ENABLE_FAST_MATH=1 \
+-D CUDA_FAST_MATH=1 \
+-D CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda-11.6 \
+-D WITH_CUDA=ON \
+-D WITH_CUBLAS=ON \
+-D WITH_CUFFT=ON \
+-D WITH_NVCUVID=ON \
+-D WITH_IPP=OFF \
+-D WITH_V4L=ON \
+-D WITH_1394=OFF \
+-D WITH_GTK=ON \
+-D WITH_QT=OFF \
+-D WITH_OPENGL=OFF \
+-D WITH_EIGEN=ON \
+-D WITH_FFMPEG=ON \
+-D WITH_GSTREAMER=ON \
+-D BUILD_JAVA=OFF \
+-D BUILD_opencv_python3=ON \
+-D BUILD_opencv_python2=OFF \
+-D BUILD_NEW_PYTHON_SUPPORT=ON \
+-D OPENCV_SKIP_PYTHON_LOADER=ON \
+-D OPENCV_GENERATE_PKGCONFIG=ON \
+-D OPENCV_ENABLE_NONFREE=ON \
+-D OPENCV_EXTRA_MODULES_PATH=/home/k100/docker_space/base/opencv/opencv_contrib-4.x/modules \
+-D WITH_CUDNN=ON \
+-D OPENCV_DNN_CUDA=ON \
+-D CUDA_ARCH_BIN=8.6 \
+-D CUDA_ARCH_PTX=8.6 \
+-D CUDNN_LIBRARY=/usr/local/cuda/lib64/libcudnn.so.8.4.1 \
+-D PYTHON3_INCLUDE_DIR=$CONDA_PREFIX/include/python3.8 \
+-D PYTHON3_NUMPY_INCLUDE_DIRS=$CONDA_PREFIX/lib/python3.8/site-packages/numpy/core/include/ \
+-D PYTHON3_PACKAGES_PATH=$CONDA_PREFIX/lib/python3.8/site-packages \
+-D PYTHON3_LIBRARY=$CONDA_PREFIX/lib/python3.8 \
+-D PYTHON_EXECUTABLE:FILEPATH=$CONDA_PREFIX/bin/python3 \
+-D PYTHON3_EXECUTABLE=$CONDA_PREFIX/bin/python3 \
+-D PYTHON_EXECUTABLE=$CONDA_PREFIX/bin/python3 \
+-D CUDNN_INCLUDE_DIR=/usr/local/cuda-11.6/include ..
+
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
+echo $LD_LIBRARY_PATH
+
+$ sudo vim /etc/ld.so.conf
+/usr/local/ffmpeg/lib/
+$ sudo ldconfig
+
+$ make -j$(nproc)
+$ make install
+
+
+
+# ------------------------------------------------------------------------------
+
+$ 
+conda create --name motion --clone cudacv
+conda activate motion
+#conda install pytorch==1.10 torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvidia
+pip install torch-1.10.1+cu113-cp38-cp38-linux_x86_64.whl
+pip install torchaudio-0.10.1+cu113-cp38-cp38-linux_x86_64.whl
+pip install torchvision-0.11.2+cu113-cp38-cp38-linux_x86_64.whl
+#pip install typing_extensions==4.5.0
+# pip install opencv-python-headless
+
+pip install openmim
+mim install mmcv_full-1.7.1-cp38-cp38-manylinux1_x86_64.whl 
+
+pip install scipy
+pip install fvcore
+pip install seaborn
+pip install pytorch-lightning==1.1.4
+pip install einops
+pip install joblib
+pip install timm
+pip install thop
+pip install yacs==0.1.8
+$ cd ~/Code/main/ultralytics
+pip install -e .
+pip uninstall opencv-python
+pip install setuptools==59.5.0
