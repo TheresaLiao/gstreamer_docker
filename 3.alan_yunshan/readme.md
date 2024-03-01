@@ -70,6 +70,7 @@ print(cv2.getBuildInformation())
 ```
 * Gstremer 的設定沒有打開，很奇怪
 ![image](https://hackmd.io/_uploads/SkfVZn6np.png)
+![alt text](../image/3_chatgpt_opencv_info.png "opencv info")
 
 
 
