@@ -1,9 +1,13 @@
-docker stop gt-container
-docker rm gt-container
+docker stop gt-container-gpu
+docker rm gt-container-gpu
 
-docker build -t gt-container:1.0 .
+#docker build -t gt-container:gpu .
+
+xhost +local:docker
 docker run -ti -d \
        -v ${PWD}:/workdir \
        -w /workdir \
-       --name gt-container \
-       gt-container:1.0 bash
+       -v /tmp/.X11-unix:/tmp/.X11-unix \
+       -e DISPLAY=$DISPLAY \
+       --name gt-container-gpu \
+       gt-container:gpu bash

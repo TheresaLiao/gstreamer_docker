@@ -1,0 +1,81 @@
+{"env_info": "sys.platform: linux\nPython: 3.8.10 (default, Jun  4 2021, 15:09:15) [GCC 7.5.0]\nCUDA available: True\nGPU 0,1,2,3: Tesla T4\nCUDA_HOME: /usr/local/cuda-11.6\nNVCC: Cuda compilation tools, release 11.6, V11.6.55\nGCC: gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0\nPyTorch: 1.10.1+cu113\nPyTorch compiling details: PyTorch built with:\n  - GCC 7.3\n  - C++ Version: 201402\n  - Intel(R) Math Kernel Library Version 2020.0.0 Product Build 20191122 for Intel(R) 64 architecture applications\n  - Intel(R) MKL-DNN v2.2.3 (Git Hash 7336ca9f055cf1bfa13efb658fe15dc9b41f0740)\n  - OpenMP 201511 (a.k.a. OpenMP 4.5)\n  - LAPACK is enabled (usually provided by MKL)\n  - NNPACK is enabled\n  - CPU capability usage: AVX512\n  - CUDA Runtime 11.3\n  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86\n  - CuDNN 8.2\n  - Magma 2.5.2\n  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.3, CUDNN_VERSION=8.2.0, CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/c++, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_KINETO -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -DEDGE_PROFILER_USE_KINETO -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-psabi -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=1.10.1, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, \n\nTorchVision: 0.11.2+cu113\nOpenCV: 4.6.0-dev\nMMCV: 1.7.1\nMMCV Compiler: GCC 9.3\nMMCV CUDA Compiler: 11.3\npyskl: 0.1.0+e36e39c", "seed": 2059852937, "config_name": "j.py", "work_dir": "j", "hook_msgs": {}}
+{"mode": "train", "epoch": 1, "iter": 100, "lr": 0.09994, "memory": 1818, "data_time": 0.09295, "top1_acc": 0.22188, "top5_acc": 0.73359, "loss_cls": 2.17797, "loss": 2.17797, "time": 0.301}
+{"mode": "train", "epoch": 1, "iter": 200, "lr": 0.09977, "memory": 1818, "data_time": 0.00017, "top1_acc": 0.42984, "top5_acc": 0.93609, "loss_cls": 1.44577, "loss": 1.44577, "time": 0.20486}
+{"mode": "train", "epoch": 1, "iter": 300, "lr": 0.09948, "memory": 1818, "data_time": 0.00017, "top1_acc": 0.52125, "top5_acc": 0.96844, "loss_cls": 1.23147, "loss": 1.23147, "time": 0.20564}
+{"mode": "train", "epoch": 1, "iter": 400, "lr": 0.09908, "memory": 1818, "data_time": 0.00021, "top1_acc": 0.59328, "top5_acc": 0.97375, "loss_cls": 1.06148, "loss": 1.06148, "time": 0.2092}
+{"mode": "val", "epoch": 1, "iter": 8, "lr": 0.09904, "top1_acc": 0.60784, "top5_acc": 0.98475}
+{"mode": "train", "epoch": 2, "iter": 100, "lr": 0.09852, "memory": 1818, "data_time": 0.0886, "top1_acc": 0.65359, "top5_acc": 0.98734, "loss_cls": 0.89689, "loss": 0.89689, "time": 0.30103}
+{"mode": "train", "epoch": 2, "iter": 200, "lr": 0.09788, "memory": 1818, "data_time": 0.00015, "top1_acc": 0.70266, "top5_acc": 0.98516, "loss_cls": 0.79437, "loss": 0.79437, "time": 0.20773}
+{"mode": "train", "epoch": 2, "iter": 300, "lr": 0.09713, "memory": 1818, "data_time": 0.00015, "top1_acc": 0.73328, "top5_acc": 0.99188, "loss_cls": 0.70348, "loss": 0.70348, "time": 0.20868}
+{"mode": "train", "epoch": 2, "iter": 400, "lr": 0.09628, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.76234, "top5_acc": 0.99391, "loss_cls": 0.6325, "loss": 0.6325, "time": 0.20822}
+{"mode": "val", "epoch": 2, "iter": 8, "lr": 0.0962, "top1_acc": 0.71024, "top5_acc": 0.98911}
+{"mode": "train", "epoch": 3, "iter": 100, "lr": 0.09523, "memory": 1818, "data_time": 0.08518, "top1_acc": 0.77531, "top5_acc": 0.99453, "loss_cls": 0.59617, "loss": 0.59617, "time": 0.29945}
+{"mode": "train", "epoch": 3, "iter": 200, "lr": 0.09415, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.79297, "top5_acc": 0.99656, "loss_cls": 0.55472, "loss": 0.55472, "time": 0.20821}
+{"mode": "train", "epoch": 3, "iter": 300, "lr": 0.09297, "memory": 1818, "data_time": 0.00015, "top1_acc": 0.80672, "top5_acc": 0.99688, "loss_cls": 0.52033, "loss": 0.52033, "time": 0.20907}
+{"mode": "train", "epoch": 3, "iter": 400, "lr": 0.09169, "memory": 1818, "data_time": 0.00015, "top1_acc": 0.81672, "top5_acc": 0.99547, "loss_cls": 0.49012, "loss": 0.49012, "time": 0.20879}
+{"mode": "val", "epoch": 3, "iter": 8, "lr": 0.09159, "top1_acc": 0.83224, "top5_acc": 0.99564}
+{"mode": "train", "epoch": 4, "iter": 100, "lr": 0.0902, "memory": 1818, "data_time": 0.0887, "top1_acc": 0.83234, "top5_acc": 0.99641, "loss_cls": 0.46648, "loss": 0.46648, "time": 0.30051}
+{"mode": "train", "epoch": 4, "iter": 200, "lr": 0.08873, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.87078, "top5_acc": 0.99828, "loss_cls": 0.37013, "loss": 0.37013, "time": 0.21124}
+{"mode": "train", "epoch": 4, "iter": 300, "lr": 0.08716, "memory": 1818, "data_time": 0.00015, "top1_acc": 0.86828, "top5_acc": 0.99641, "loss_cls": 0.37961, "loss": 0.37961, "time": 0.2089}
+{"mode": "train", "epoch": 4, "iter": 400, "lr": 0.08551, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.89406, "top5_acc": 0.99859, "loss_cls": 0.31039, "loss": 0.31039, "time": 0.20921}
+{"mode": "val", "epoch": 4, "iter": 8, "lr": 0.08537, "top1_acc": 0.86275, "top5_acc": 0.99129}
+{"mode": "train", "epoch": 5, "iter": 100, "lr": 0.08363, "memory": 1818, "data_time": 0.0834, "top1_acc": 0.90797, "top5_acc": 0.99781, "loss_cls": 0.27667, "loss": 0.27667, "time": 0.30005}
+{"mode": "train", "epoch": 5, "iter": 200, "lr": 0.08181, "memory": 1818, "data_time": 0.00015, "top1_acc": 0.91766, "top5_acc": 0.99812, "loss_cls": 0.25513, "loss": 0.25513, "time": 0.2087}
+{"mode": "train", "epoch": 5, "iter": 300, "lr": 0.07992, "memory": 1818, "data_time": 0.00014, "top1_acc": 0.92344, "top5_acc": 0.99875, "loss_cls": 0.23395, "loss": 0.23395, "time": 0.20888}
+{"mode": "train", "epoch": 5, "iter": 400, "lr": 0.07796, "memory": 1818, "data_time": 0.00018, "top1_acc": 0.9275, "top5_acc": 0.99938, "loss_cls": 0.21857, "loss": 0.21857, "time": 0.20973}
+{"mode": "val", "epoch": 5, "iter": 8, "lr": 0.0778, "top1_acc": 0.90414, "top5_acc": 0.99346}
+{"mode": "train", "epoch": 6, "iter": 100, "lr": 0.07577, "memory": 1818, "data_time": 0.08345, "top1_acc": 0.92906, "top5_acc": 0.99969, "loss_cls": 0.21021, "loss": 0.21021, "time": 0.29812}
+{"mode": "train", "epoch": 6, "iter": 200, "lr": 0.07368, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.93562, "top5_acc": 0.99891, "loss_cls": 0.19708, "loss": 0.19708, "time": 0.20955}
+{"mode": "train", "epoch": 6, "iter": 300, "lr": 0.07153, "memory": 1818, "data_time": 0.00019, "top1_acc": 0.94156, "top5_acc": 0.99953, "loss_cls": 0.17738, "loss": 0.17738, "time": 0.21195}
+{"mode": "train", "epoch": 6, "iter": 400, "lr": 0.06933, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.94859, "top5_acc": 0.99969, "loss_cls": 0.15449, "loss": 0.15449, "time": 0.2124}
+{"mode": "val", "epoch": 6, "iter": 8, "lr": 0.06916, "top1_acc": 0.86057, "top5_acc": 0.99346}
+{"mode": "train", "epoch": 7, "iter": 100, "lr": 0.06691, "memory": 1818, "data_time": 0.08645, "top1_acc": 0.95109, "top5_acc": 0.99953, "loss_cls": 0.145, "loss": 0.145, "time": 0.30162}
+{"mode": "train", "epoch": 7, "iter": 200, "lr": 0.06463, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.95953, "top5_acc": 0.99984, "loss_cls": 0.12721, "loss": 0.12721, "time": 0.20908}
+{"mode": "train", "epoch": 7, "iter": 300, "lr": 0.06231, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.95531, "top5_acc": 0.99922, "loss_cls": 0.13542, "loss": 0.13542, "time": 0.20927}
+{"mode": "train", "epoch": 7, "iter": 400, "lr": 0.05997, "memory": 1818, "data_time": 0.00014, "top1_acc": 0.95766, "top5_acc": 0.99953, "loss_cls": 0.13872, "loss": 0.13872, "time": 0.21063}
+{"mode": "val", "epoch": 7, "iter": 8, "lr": 0.05978, "top1_acc": 0.92375, "top5_acc": 0.99564}
+{"mode": "train", "epoch": 8, "iter": 100, "lr": 0.05741, "memory": 1818, "data_time": 0.08372, "top1_acc": 0.96203, "top5_acc": 0.99953, "loss_cls": 0.11482, "loss": 0.11482, "time": 0.30107}
+{"mode": "train", "epoch": 8, "iter": 200, "lr": 0.05502, "memory": 1818, "data_time": 0.00025, "top1_acc": 0.96625, "top5_acc": 0.99953, "loss_cls": 0.10996, "loss": 0.10996, "time": 0.20904}
+{"mode": "train", "epoch": 8, "iter": 300, "lr": 0.05262, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.97125, "top5_acc": 0.99984, "loss_cls": 0.09666, "loss": 0.09666, "time": 0.2086}
+{"mode": "train", "epoch": 8, "iter": 400, "lr": 0.05022, "memory": 1818, "data_time": 0.00017, "top1_acc": 0.97344, "top5_acc": 1.0, "loss_cls": 0.08537, "loss": 0.08537, "time": 0.20951}
+{"mode": "val", "epoch": 8, "iter": 8, "lr": 0.05002, "top1_acc": 0.94336, "top5_acc": 0.99564}
+{"mode": "train", "epoch": 9, "iter": 100, "lr": 0.04762, "memory": 1818, "data_time": 0.09132, "top1_acc": 0.97734, "top5_acc": 0.99953, "loss_cls": 0.07741, "loss": 0.07741, "time": 0.30509}
+{"mode": "train", "epoch": 9, "iter": 200, "lr": 0.04522, "memory": 1818, "data_time": 0.00022, "top1_acc": 0.97312, "top5_acc": 1.0, "loss_cls": 0.08704, "loss": 0.08704, "time": 0.2113}
+{"mode": "train", "epoch": 9, "iter": 300, "lr": 0.04283, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.98297, "top5_acc": 0.99984, "loss_cls": 0.05863, "loss": 0.05863, "time": 0.20971}
+{"mode": "train", "epoch": 9, "iter": 400, "lr": 0.04046, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.98078, "top5_acc": 1.0, "loss_cls": 0.05971, "loss": 0.05971, "time": 0.20947}
+{"mode": "val", "epoch": 9, "iter": 8, "lr": 0.04027, "top1_acc": 0.95425, "top5_acc": 0.99782}
+{"mode": "train", "epoch": 10, "iter": 100, "lr": 0.03792, "memory": 1818, "data_time": 0.08371, "top1_acc": 0.98109, "top5_acc": 1.0, "loss_cls": 0.0653, "loss": 0.0653, "time": 0.29941}
+{"mode": "train", "epoch": 10, "iter": 200, "lr": 0.0356, "memory": 1818, "data_time": 0.00018, "top1_acc": 0.98016, "top5_acc": 1.0, "loss_cls": 0.06519, "loss": 0.06519, "time": 0.21159}
+{"mode": "train", "epoch": 10, "iter": 300, "lr": 0.03331, "memory": 1818, "data_time": 0.00017, "top1_acc": 0.98234, "top5_acc": 0.99984, "loss_cls": 0.05446, "loss": 0.05446, "time": 0.2102}
+{"mode": "train", "epoch": 10, "iter": 400, "lr": 0.03107, "memory": 1818, "data_time": 0.00017, "top1_acc": 0.985, "top5_acc": 1.0, "loss_cls": 0.04801, "loss": 0.04801, "time": 0.20996}
+{"mode": "val", "epoch": 10, "iter": 8, "lr": 0.03089, "top1_acc": 0.93464, "top5_acc": 0.99564}
+{"mode": "train", "epoch": 11, "iter": 100, "lr": 0.02869, "memory": 1818, "data_time": 0.08901, "top1_acc": 0.99297, "top5_acc": 1.0, "loss_cls": 0.02892, "loss": 0.02892, "time": 0.30228}
+{"mode": "train", "epoch": 11, "iter": 200, "lr": 0.02654, "memory": 1818, "data_time": 0.00017, "top1_acc": 0.99156, "top5_acc": 1.0, "loss_cls": 0.03103, "loss": 0.03103, "time": 0.21227}
+{"mode": "train", "epoch": 11, "iter": 300, "lr": 0.02444, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.99344, "top5_acc": 1.0, "loss_cls": 0.02603, "loss": 0.02603, "time": 0.21232}
+{"mode": "train", "epoch": 11, "iter": 400, "lr": 0.0224, "memory": 1818, "data_time": 0.0002, "top1_acc": 0.995, "top5_acc": 1.0, "loss_cls": 0.02193, "loss": 0.02193, "time": 0.21206}
+{"mode": "val", "epoch": 11, "iter": 8, "lr": 0.02224, "top1_acc": 0.95861, "top5_acc": 0.99564}
+{"mode": "train", "epoch": 12, "iter": 100, "lr": 0.02027, "memory": 1818, "data_time": 0.08772, "top1_acc": 0.99422, "top5_acc": 1.0, "loss_cls": 0.02067, "loss": 0.02067, "time": 0.29935}
+{"mode": "train", "epoch": 12, "iter": 200, "lr": 0.01837, "memory": 1818, "data_time": 0.00018, "top1_acc": 0.99656, "top5_acc": 1.0, "loss_cls": 0.01736, "loss": 0.01736, "time": 0.21017}
+{"mode": "train", "epoch": 12, "iter": 300, "lr": 0.01655, "memory": 1818, "data_time": 0.00024, "top1_acc": 0.99672, "top5_acc": 1.0, "loss_cls": 0.01335, "loss": 0.01335, "time": 0.21088}
+{"mode": "train", "epoch": 12, "iter": 400, "lr": 0.0148, "memory": 1818, "data_time": 0.00017, "top1_acc": 0.99859, "top5_acc": 1.0, "loss_cls": 0.01138, "loss": 0.01138, "time": 0.20954}
+{"mode": "val", "epoch": 12, "iter": 8, "lr": 0.01466, "top1_acc": 0.95425, "top5_acc": 0.99782}
+{"mode": "train", "epoch": 13, "iter": 100, "lr": 0.013, "memory": 1818, "data_time": 0.08794, "top1_acc": 0.99656, "top5_acc": 1.0, "loss_cls": 0.01418, "loss": 0.01418, "time": 0.29983}
+{"mode": "train", "epoch": 13, "iter": 200, "lr": 0.01143, "memory": 1818, "data_time": 0.00017, "top1_acc": 0.99766, "top5_acc": 1.0, "loss_cls": 0.0116, "loss": 0.0116, "time": 0.20933}
+{"mode": "train", "epoch": 13, "iter": 300, "lr": 0.00994, "memory": 1818, "data_time": 0.00017, "top1_acc": 0.99922, "top5_acc": 1.0, "loss_cls": 0.00778, "loss": 0.00778, "time": 0.20951}
+{"mode": "train", "epoch": 13, "iter": 400, "lr": 0.00855, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.99844, "top5_acc": 1.0, "loss_cls": 0.00818, "loss": 0.00818, "time": 0.20932}
+{"mode": "val", "epoch": 13, "iter": 8, "lr": 0.00844, "top1_acc": 0.9695, "top5_acc": 0.99782}
+{"mode": "train", "epoch": 14, "iter": 100, "lr": 0.00715, "memory": 1818, "data_time": 0.09182, "top1_acc": 0.99844, "top5_acc": 1.0, "loss_cls": 0.0092, "loss": 0.0092, "time": 0.30105}
+{"mode": "train", "epoch": 14, "iter": 200, "lr": 0.00596, "memory": 1818, "data_time": 0.00018, "top1_acc": 0.99859, "top5_acc": 1.0, "loss_cls": 0.00785, "loss": 0.00785, "time": 0.20854}
+{"mode": "train", "epoch": 14, "iter": 300, "lr": 0.00487, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.99969, "top5_acc": 1.0, "loss_cls": 0.00645, "loss": 0.00645, "time": 0.20991}
+{"mode": "train", "epoch": 14, "iter": 400, "lr": 0.00389, "memory": 1818, "data_time": 0.00017, "top1_acc": 0.99891, "top5_acc": 1.0, "loss_cls": 0.00692, "loss": 0.00692, "time": 0.21076}
+{"mode": "val", "epoch": 14, "iter": 8, "lr": 0.00382, "top1_acc": 0.96732, "top5_acc": 0.99782}
+{"mode": "train", "epoch": 15, "iter": 100, "lr": 0.00295, "memory": 1818, "data_time": 0.0876, "top1_acc": 0.99922, "top5_acc": 1.0, "loss_cls": 0.00622, "loss": 0.00622, "time": 0.30225}
+{"mode": "train", "epoch": 15, "iter": 200, "lr": 0.00219, "memory": 1818, "data_time": 0.00017, "top1_acc": 0.99906, "top5_acc": 1.0, "loss_cls": 0.00679, "loss": 0.00679, "time": 0.20851}
+{"mode": "train", "epoch": 15, "iter": 300, "lr": 0.00154, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.99938, "top5_acc": 1.0, "loss_cls": 0.00597, "loss": 0.00597, "time": 0.20933}
+{"mode": "train", "epoch": 15, "iter": 400, "lr": 0.001, "memory": 1818, "data_time": 0.00027, "top1_acc": 0.99984, "top5_acc": 1.0, "loss_cls": 0.00544, "loss": 0.00544, "time": 0.21025}
+{"mode": "val", "epoch": 15, "iter": 8, "lr": 0.00097, "top1_acc": 0.9695, "top5_acc": 0.99782}
+{"mode": "train", "epoch": 16, "iter": 100, "lr": 0.00055, "memory": 1818, "data_time": 0.08291, "top1_acc": 0.99984, "top5_acc": 1.0, "loss_cls": 0.00469, "loss": 0.00469, "time": 0.30012}
+{"mode": "train", "epoch": 16, "iter": 200, "lr": 0.00025, "memory": 1818, "data_time": 0.00019, "top1_acc": 0.99844, "top5_acc": 1.0, "loss_cls": 0.00676, "loss": 0.00676, "time": 0.2092}
+{"mode": "train", "epoch": 16, "iter": 300, "lr": 7e-05, "memory": 1818, "data_time": 0.00015, "top1_acc": 0.99938, "top5_acc": 1.0, "loss_cls": 0.00581, "loss": 0.00581, "time": 0.20918}
+{"mode": "train", "epoch": 16, "iter": 400, "lr": 0.0, "memory": 1818, "data_time": 0.00016, "top1_acc": 0.99969, "top5_acc": 1.0, "loss_cls": 0.00516, "loss": 0.00516, "time": 0.20976}
+{"mode": "val", "epoch": 16, "iter": 8, "lr": 0.0, "top1_acc": 0.96732, "top5_acc": 0.99782}

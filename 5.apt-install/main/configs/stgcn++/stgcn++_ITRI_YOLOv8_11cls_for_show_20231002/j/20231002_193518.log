@@ -1,0 +1,381 @@
+2023-10-02 19:35:18,745 - pyskl - INFO - Environment info:
+------------------------------------------------------------
+sys.platform: linux
+Python: 3.8.10 (default, Jun  4 2021, 15:09:15) [GCC 7.5.0]
+CUDA available: True
+GPU 0,1,2,3: Tesla T4
+CUDA_HOME: /usr/local/cuda-11.6
+NVCC: Cuda compilation tools, release 11.6, V11.6.55
+GCC: gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
+PyTorch: 1.10.1+cu113
+PyTorch compiling details: PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2020.0.0 Product Build 20191122 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v2.2.3 (Git Hash 7336ca9f055cf1bfa13efb658fe15dc9b41f0740)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - LAPACK is enabled (usually provided by MKL)
+  - NNPACK is enabled
+  - CPU capability usage: AVX512
+  - CUDA Runtime 11.3
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86
+  - CuDNN 8.2
+  - Magma 2.5.2
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.3, CUDNN_VERSION=8.2.0, CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/c++, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_KINETO -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -DEDGE_PROFILER_USE_KINETO -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-psabi -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=1.10.1, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, 
+
+TorchVision: 0.11.2+cu113
+OpenCV: 4.6.0-dev
+MMCV: 1.7.1
+MMCV Compiler: GCC 9.3
+MMCV CUDA Compiler: 11.3
+pyskl: 0.1.0+e36e39c
+------------------------------------------------------------
+
+2023-10-02 19:35:18,958 - pyskl - INFO - Config: model = dict(
+    type='RecognizerGCN',
+    backbone=dict(
+        type='STGCN',
+        gcn_adaptive='init',
+        gcn_with_res=True,
+        tcn_type='mstcn',
+        graph_cfg=dict(layout='coco', mode='spatial')),
+    cls_head=dict(type='GCNHead', num_classes=11, in_channels=256))
+dataset_type = 'PoseDataset'
+ann_file = 'data/yolov8_stgcnpptrain4SHOW_20231002_cls_11.pkl'
+train_pipeline = [
+    dict(type='PreNormalize2D'),
+    dict(type='GenSkeFeat', dataset='coco', feats=['j']),
+    dict(type='UniformSample', clip_len=100),
+    dict(type='PoseDecode'),
+    dict(type='FormatGCNInput', num_person=2),
+    dict(type='Collect', keys=['keypoint', 'label'], meta_keys=[]),
+    dict(type='ToTensor', keys=['keypoint'])
+]
+val_pipeline = [
+    dict(type='PreNormalize2D'),
+    dict(type='GenSkeFeat', dataset='coco', feats=['j']),
+    dict(type='UniformSample', clip_len=100, num_clips=1),
+    dict(type='PoseDecode'),
+    dict(type='FormatGCNInput', num_person=2),
+    dict(type='Collect', keys=['keypoint', 'label'], meta_keys=[]),
+    dict(type='ToTensor', keys=['keypoint'])
+]
+test_pipeline = [
+    dict(type='PreNormalize2D'),
+    dict(type='GenSkeFeat', dataset='coco', feats=['j']),
+    dict(type='UniformSample', clip_len=100, num_clips=10),
+    dict(type='PoseDecode'),
+    dict(type='FormatGCNInput', num_person=2),
+    dict(type='Collect', keys=['keypoint', 'label'], meta_keys=[]),
+    dict(type='ToTensor', keys=['keypoint'])
+]
+data = dict(
+    videos_per_gpu=16,
+    workers_per_gpu=2,
+    test_dataloader=dict(videos_per_gpu=1),
+    train=dict(
+        type='RepeatDataset',
+        times=5,
+        dataset=dict(
+            type='PoseDataset',
+            ann_file='data/yolov8_stgcnpptrain4SHOW_20231002_cls_11.pkl',
+            pipeline=[
+                dict(type='PreNormalize2D'),
+                dict(type='GenSkeFeat', dataset='coco', feats=['j']),
+                dict(type='UniformSample', clip_len=100),
+                dict(type='PoseDecode'),
+                dict(type='FormatGCNInput', num_person=2),
+                dict(type='Collect', keys=['keypoint', 'label'], meta_keys=[]),
+                dict(type='ToTensor', keys=['keypoint'])
+            ],
+            split='xsub_train')),
+    val=dict(
+        type='PoseDataset',
+        ann_file='data/yolov8_stgcnpptrain4SHOW_20231002_cls_11.pkl',
+        pipeline=[
+            dict(type='PreNormalize2D'),
+            dict(type='GenSkeFeat', dataset='coco', feats=['j']),
+            dict(type='UniformSample', clip_len=100, num_clips=1),
+            dict(type='PoseDecode'),
+            dict(type='FormatGCNInput', num_person=2),
+            dict(type='Collect', keys=['keypoint', 'label'], meta_keys=[]),
+            dict(type='ToTensor', keys=['keypoint'])
+        ],
+        split='xsub_val'),
+    test=dict(
+        type='PoseDataset',
+        ann_file='data/yolov8_stgcnpptrain4SHOW_20231002_cls_11.pkl',
+        pipeline=[
+            dict(type='PreNormalize2D'),
+            dict(type='GenSkeFeat', dataset='coco', feats=['j']),
+            dict(type='UniformSample', clip_len=100, num_clips=10),
+            dict(type='PoseDecode'),
+            dict(type='FormatGCNInput', num_person=2),
+            dict(type='Collect', keys=['keypoint', 'label'], meta_keys=[]),
+            dict(type='ToTensor', keys=['keypoint'])
+        ],
+        split='xsub_val'))
+optimizer = dict(
+    type='SGD', lr=0.1, momentum=0.9, weight_decay=0.0005, nesterov=True)
+optimizer_config = dict(grad_clip=None)
+lr_config = dict(policy='CosineAnnealing', min_lr=0, by_epoch=False)
+total_epochs = 16
+checkpoint_config = dict(interval=1)
+evaluation = dict(interval=1, metrics=['top_k_accuracy'])
+log_config = dict(interval=100, hooks=[dict(type='TextLoggerHook')])
+log_level = 'INFO'
+work_dir = './work_dirs/stgcn++/stgcn++_ITRI_YOLOv8_11cls_for_show/j'
+dist_params = dict(backend='nccl')
+gpu_ids = range(0, 4)
+
+2023-10-02 19:35:24,212 - pyskl - INFO - Set random seed to 1879876533, deterministic: False
+2023-10-02 19:35:24,450 - pyskl - INFO - 5805 videos remain after valid thresholding
+2023-10-02 19:35:25,092 - pyskl - INFO - 509 videos remain after valid thresholding
+2023-10-02 19:35:25,093 - pyskl - INFO - Start running, host: k100@ccma-SYS-1029GP-TR, work_dir: /home/k100/Code/pyskl/work_dirs/stgcn++/stgcn++_ITRI_YOLOv8_11cls_for_show/j
+2023-10-02 19:35:25,093 - pyskl - INFO - Hooks will be executed in the following order:
+before_run:
+(VERY_HIGH   ) CosineAnnealingLrUpdaterHook       
+(NORMAL      ) CheckpointHook                     
+(NORMAL      ) DistEvalHook                       
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+before_train_epoch:
+(VERY_HIGH   ) CosineAnnealingLrUpdaterHook       
+(NORMAL      ) DistSamplerSeedHook                
+(NORMAL      ) DistEvalHook                       
+(LOW         ) IterTimerHook                      
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+before_train_iter:
+(VERY_HIGH   ) CosineAnnealingLrUpdaterHook       
+(NORMAL      ) DistEvalHook                       
+(LOW         ) IterTimerHook                      
+ -------------------- 
+after_train_iter:
+(ABOVE_NORMAL) OptimizerHook                      
+(NORMAL      ) CheckpointHook                     
+(NORMAL      ) DistEvalHook                       
+(LOW         ) IterTimerHook                      
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+after_train_epoch:
+(NORMAL      ) CheckpointHook                     
+(NORMAL      ) DistEvalHook                       
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+before_val_epoch:
+(NORMAL      ) DistSamplerSeedHook                
+(LOW         ) IterTimerHook                      
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+before_val_iter:
+(LOW         ) IterTimerHook                      
+ -------------------- 
+after_val_iter:
+(LOW         ) IterTimerHook                      
+ -------------------- 
+after_val_epoch:
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+after_run:
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+2023-10-02 19:35:25,093 - pyskl - INFO - workflow: [('train', 1)], max: 16 epochs
+2023-10-02 19:35:25,093 - pyskl - INFO - Checkpoints will be saved to /home/k100/Code/pyskl/work_dirs/stgcn++/stgcn++_ITRI_YOLOv8_11cls_for_show/j by HardDiskBackend.
+2023-10-02 19:35:54,895 - pyskl - INFO - Epoch [1][100/454]	lr: 9.995e-02, eta: 0:35:34, time: 0.298, data_time: 0.091, memory: 1818, top1_acc: 0.2573, top5_acc: 0.7584, loss_cls: 2.0432, loss: 2.0432
+2023-10-02 19:36:15,353 - pyskl - INFO - Epoch [1][200/454]	lr: 9.981e-02, eta: 0:29:35, time: 0.205, data_time: 0.000, memory: 1818, top1_acc: 0.4719, top5_acc: 0.9386, loss_cls: 1.3622, loss: 1.3622
+2023-10-02 19:36:36,116 - pyskl - INFO - Epoch [1][300/454]	lr: 9.958e-02, eta: 0:27:28, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.6663, top5_acc: 0.9811, loss_cls: 0.9081, loss: 0.9081
+2023-10-02 19:36:56,985 - pyskl - INFO - Epoch [1][400/454]	lr: 9.926e-02, eta: 0:26:16, time: 0.209, data_time: 0.000, memory: 1818, top1_acc: 0.7716, top5_acc: 0.9916, loss_cls: 0.6445, loss: 0.6445
+2023-10-02 19:37:09,192 - pyskl - INFO - Saving checkpoint at 1 epochs
+2023-10-02 19:37:19,129 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 19:37:19,131 - pyskl - INFO - 
+top1_acc	0.7230
+top5_acc	0.9823
+2023-10-02 19:37:19,212 - pyskl - INFO - Now best checkpoint is saved as best_top1_acc_epoch_1.pth.
+2023-10-02 19:37:19,212 - pyskl - INFO - Best top1_acc is 0.7230 at 1 epoch.
+2023-10-02 19:37:19,212 - pyskl - INFO - Epoch(val) [1][8]	top1_acc: 0.7230, top5_acc: 0.9823
+2023-10-02 19:37:49,089 - pyskl - INFO - Epoch [2][100/454]	lr: 9.858e-02, eta: 0:24:34, time: 0.299, data_time: 0.089, memory: 1818, top1_acc: 0.8592, top5_acc: 0.9959, loss_cls: 0.4167, loss: 0.4167
+2023-10-02 19:38:09,784 - pyskl - INFO - Epoch [2][200/454]	lr: 9.802e-02, eta: 0:23:59, time: 0.207, data_time: 0.000, memory: 1818, top1_acc: 0.8808, top5_acc: 0.9967, loss_cls: 0.3503, loss: 0.3503
+2023-10-02 19:38:30,642 - pyskl - INFO - Epoch [2][300/454]	lr: 9.737e-02, eta: 0:23:30, time: 0.209, data_time: 0.000, memory: 1818, top1_acc: 0.9066, top5_acc: 0.9980, loss_cls: 0.2800, loss: 0.2800
+2023-10-02 19:38:51,531 - pyskl - INFO - Epoch [2][400/454]	lr: 9.664e-02, eta: 0:23:02, time: 0.209, data_time: 0.000, memory: 1818, top1_acc: 0.9225, top5_acc: 0.9991, loss_cls: 0.2392, loss: 0.2392
+2023-10-02 19:39:03,816 - pyskl - INFO - Saving checkpoint at 2 epochs
+2023-10-02 19:39:13,381 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 19:39:13,382 - pyskl - INFO - 
+top1_acc	0.8782
+top5_acc	0.9941
+2023-10-02 19:39:13,384 - pyskl - INFO - The previous best checkpoint /home/k100/Code/pyskl/work_dirs/stgcn++/stgcn++_ITRI_YOLOv8_11cls_for_show/j/best_top1_acc_epoch_1.pth was removed
+2023-10-02 19:39:13,465 - pyskl - INFO - Now best checkpoint is saved as best_top1_acc_epoch_2.pth.
+2023-10-02 19:39:13,465 - pyskl - INFO - Best top1_acc is 0.8782 at 2 epoch.
+2023-10-02 19:39:13,465 - pyskl - INFO - Epoch(val) [2][8]	top1_acc: 0.8782, top5_acc: 0.9941
+2023-10-02 19:39:43,180 - pyskl - INFO - Epoch [3][100/454]	lr: 9.533e-02, eta: 0:22:07, time: 0.297, data_time: 0.089, memory: 1818, top1_acc: 0.9366, top5_acc: 0.9988, loss_cls: 0.2005, loss: 0.2005
+2023-10-02 19:40:04,345 - pyskl - INFO - Epoch [3][200/454]	lr: 9.438e-02, eta: 0:21:46, time: 0.212, data_time: 0.000, memory: 1818, top1_acc: 0.9328, top5_acc: 0.9988, loss_cls: 0.2019, loss: 0.2019
+2023-10-02 19:40:25,583 - pyskl - INFO - Epoch [3][300/454]	lr: 9.334e-02, eta: 0:21:24, time: 0.212, data_time: 0.000, memory: 1818, top1_acc: 0.9444, top5_acc: 0.9992, loss_cls: 0.1725, loss: 0.1725
+2023-10-02 19:40:46,731 - pyskl - INFO - Epoch [3][400/454]	lr: 9.222e-02, eta: 0:21:03, time: 0.211, data_time: 0.000, memory: 1818, top1_acc: 0.9430, top5_acc: 0.9991, loss_cls: 0.1757, loss: 0.1757
+2023-10-02 19:40:58,916 - pyskl - INFO - Saving checkpoint at 3 epochs
+2023-10-02 19:41:08,848 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 19:41:08,849 - pyskl - INFO - 
+top1_acc	0.8487
+top5_acc	0.9961
+2023-10-02 19:41:08,849 - pyskl - INFO - Epoch(val) [3][8]	top1_acc: 0.8487, top5_acc: 0.9961
+2023-10-02 19:41:38,958 - pyskl - INFO - Epoch [4][100/454]	lr: 9.035e-02, eta: 0:20:20, time: 0.301, data_time: 0.088, memory: 1818, top1_acc: 0.9541, top5_acc: 0.9997, loss_cls: 0.1397, loss: 0.1397
+2023-10-02 19:42:00,235 - pyskl - INFO - Epoch [4][200/454]	lr: 8.903e-02, eta: 0:20:00, time: 0.213, data_time: 0.000, memory: 1818, top1_acc: 0.9573, top5_acc: 0.9992, loss_cls: 0.1305, loss: 0.1305
+2023-10-02 19:42:21,370 - pyskl - INFO - Epoch [4][300/454]	lr: 8.764e-02, eta: 0:19:39, time: 0.211, data_time: 0.000, memory: 1818, top1_acc: 0.9620, top5_acc: 0.9995, loss_cls: 0.1194, loss: 0.1194
+2023-10-02 19:42:42,557 - pyskl - INFO - Epoch [4][400/454]	lr: 8.619e-02, eta: 0:19:18, time: 0.212, data_time: 0.000, memory: 1818, top1_acc: 0.9636, top5_acc: 0.9995, loss_cls: 0.1208, loss: 0.1208
+2023-10-02 19:42:54,954 - pyskl - INFO - Saving checkpoint at 4 epochs
+2023-10-02 19:43:04,730 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 19:43:04,731 - pyskl - INFO - 
+top1_acc	0.8900
+top5_acc	0.9961
+2023-10-02 19:43:04,733 - pyskl - INFO - The previous best checkpoint /home/k100/Code/pyskl/work_dirs/stgcn++/stgcn++_ITRI_YOLOv8_11cls_for_show/j/best_top1_acc_epoch_2.pth was removed
+2023-10-02 19:43:04,804 - pyskl - INFO - Now best checkpoint is saved as best_top1_acc_epoch_4.pth.
+2023-10-02 19:43:04,804 - pyskl - INFO - Best top1_acc is 0.8900 at 4 epoch.
+2023-10-02 19:43:04,804 - pyskl - INFO - Epoch(val) [4][8]	top1_acc: 0.8900, top5_acc: 0.9961
+2023-10-02 19:43:34,690 - pyskl - INFO - Epoch [5][100/454]	lr: 8.381e-02, eta: 0:18:39, time: 0.299, data_time: 0.088, memory: 1818, top1_acc: 0.9681, top5_acc: 0.9995, loss_cls: 0.1021, loss: 0.1021
+2023-10-02 19:43:55,517 - pyskl - INFO - Epoch [5][200/454]	lr: 8.219e-02, eta: 0:18:18, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9708, top5_acc: 0.9998, loss_cls: 0.0908, loss: 0.0908
+2023-10-02 19:44:16,277 - pyskl - INFO - Epoch [5][300/454]	lr: 8.050e-02, eta: 0:17:56, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9702, top5_acc: 0.9995, loss_cls: 0.1002, loss: 0.1002
+2023-10-02 19:44:37,133 - pyskl - INFO - Epoch [5][400/454]	lr: 7.876e-02, eta: 0:17:35, time: 0.209, data_time: 0.000, memory: 1818, top1_acc: 0.9727, top5_acc: 0.9998, loss_cls: 0.0874, loss: 0.0874
+2023-10-02 19:44:49,291 - pyskl - INFO - Saving checkpoint at 5 epochs
+2023-10-02 19:44:59,249 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 19:44:59,250 - pyskl - INFO - 
+top1_acc	0.9136
+top5_acc	1.0000
+2023-10-02 19:44:59,252 - pyskl - INFO - The previous best checkpoint /home/k100/Code/pyskl/work_dirs/stgcn++/stgcn++_ITRI_YOLOv8_11cls_for_show/j/best_top1_acc_epoch_4.pth was removed
+2023-10-02 19:44:59,326 - pyskl - INFO - Now best checkpoint is saved as best_top1_acc_epoch_5.pth.
+2023-10-02 19:44:59,327 - pyskl - INFO - Best top1_acc is 0.9136 at 5 epoch.
+2023-10-02 19:44:59,327 - pyskl - INFO - Epoch(val) [5][8]	top1_acc: 0.9136, top5_acc: 1.0000
+2023-10-02 19:45:29,545 - pyskl - INFO - Epoch [6][100/454]	lr: 7.597e-02, eta: 0:16:59, time: 0.302, data_time: 0.093, memory: 1818, top1_acc: 0.9727, top5_acc: 0.9998, loss_cls: 0.0841, loss: 0.0841
+2023-10-02 19:45:50,401 - pyskl - INFO - Epoch [6][200/454]	lr: 7.410e-02, eta: 0:16:38, time: 0.209, data_time: 0.000, memory: 1818, top1_acc: 0.9761, top5_acc: 0.9998, loss_cls: 0.0798, loss: 0.0798
+2023-10-02 19:46:11,495 - pyskl - INFO - Epoch [6][300/454]	lr: 7.219e-02, eta: 0:16:18, time: 0.211, data_time: 0.000, memory: 1818, top1_acc: 0.9712, top5_acc: 1.0000, loss_cls: 0.0872, loss: 0.0872
+2023-10-02 19:46:32,510 - pyskl - INFO - Epoch [6][400/454]	lr: 7.023e-02, eta: 0:15:57, time: 0.210, data_time: 0.000, memory: 1818, top1_acc: 0.9759, top5_acc: 0.9995, loss_cls: 0.0737, loss: 0.0737
+2023-10-02 19:46:44,810 - pyskl - INFO - Saving checkpoint at 6 epochs
+2023-10-02 19:46:54,769 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 19:46:54,770 - pyskl - INFO - 
+top1_acc	0.9155
+top5_acc	1.0000
+2023-10-02 19:46:54,772 - pyskl - INFO - The previous best checkpoint /home/k100/Code/pyskl/work_dirs/stgcn++/stgcn++_ITRI_YOLOv8_11cls_for_show/j/best_top1_acc_epoch_5.pth was removed
+2023-10-02 19:46:54,846 - pyskl - INFO - Now best checkpoint is saved as best_top1_acc_epoch_6.pth.
+2023-10-02 19:46:54,847 - pyskl - INFO - Best top1_acc is 0.9155 at 6 epoch.
+2023-10-02 19:46:54,847 - pyskl - INFO - Epoch(val) [6][8]	top1_acc: 0.9155, top5_acc: 1.0000
+2023-10-02 19:47:25,119 - pyskl - INFO - Epoch [7][100/454]	lr: 6.714e-02, eta: 0:15:22, time: 0.303, data_time: 0.093, memory: 1818, top1_acc: 0.9791, top5_acc: 1.0000, loss_cls: 0.0729, loss: 0.0729
+2023-10-02 19:47:45,938 - pyskl - INFO - Epoch [7][200/454]	lr: 6.509e-02, eta: 0:15:02, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9827, top5_acc: 0.9997, loss_cls: 0.0589, loss: 0.0589
+2023-10-02 19:48:06,736 - pyskl - INFO - Epoch [7][300/454]	lr: 6.302e-02, eta: 0:14:41, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9831, top5_acc: 1.0000, loss_cls: 0.0579, loss: 0.0579
+2023-10-02 19:48:27,558 - pyskl - INFO - Epoch [7][400/454]	lr: 6.092e-02, eta: 0:14:20, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9834, top5_acc: 1.0000, loss_cls: 0.0529, loss: 0.0529
+2023-10-02 19:48:39,694 - pyskl - INFO - Saving checkpoint at 7 epochs
+2023-10-02 19:48:49,686 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 19:48:49,687 - pyskl - INFO - 
+top1_acc	0.9057
+top5_acc	1.0000
+2023-10-02 19:48:49,687 - pyskl - INFO - Epoch(val) [7][8]	top1_acc: 0.9057, top5_acc: 1.0000
+2023-10-02 19:49:19,779 - pyskl - INFO - Epoch [8][100/454]	lr: 5.765e-02, eta: 0:13:46, time: 0.301, data_time: 0.090, memory: 1818, top1_acc: 0.9850, top5_acc: 0.9998, loss_cls: 0.0544, loss: 0.0544
+2023-10-02 19:49:40,623 - pyskl - INFO - Epoch [8][200/454]	lr: 5.550e-02, eta: 0:13:25, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9900, top5_acc: 1.0000, loss_cls: 0.0340, loss: 0.0340
+2023-10-02 19:50:01,632 - pyskl - INFO - Epoch [8][300/454]	lr: 5.335e-02, eta: 0:13:05, time: 0.210, data_time: 0.000, memory: 1818, top1_acc: 0.9880, top5_acc: 1.0000, loss_cls: 0.0449, loss: 0.0449
+2023-10-02 19:50:22,716 - pyskl - INFO - Epoch [8][400/454]	lr: 5.119e-02, eta: 0:12:44, time: 0.211, data_time: 0.000, memory: 1818, top1_acc: 0.9881, top5_acc: 1.0000, loss_cls: 0.0426, loss: 0.0426
+2023-10-02 19:50:35,063 - pyskl - INFO - Saving checkpoint at 8 epochs
+2023-10-02 19:50:44,708 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 19:50:44,709 - pyskl - INFO - 
+top1_acc	0.9253
+top5_acc	1.0000
+2023-10-02 19:50:44,711 - pyskl - INFO - The previous best checkpoint /home/k100/Code/pyskl/work_dirs/stgcn++/stgcn++_ITRI_YOLOv8_11cls_for_show/j/best_top1_acc_epoch_6.pth was removed
+2023-10-02 19:50:44,812 - pyskl - INFO - Now best checkpoint is saved as best_top1_acc_epoch_8.pth.
+2023-10-02 19:50:44,812 - pyskl - INFO - Best top1_acc is 0.9253 at 8 epoch.
+2023-10-02 19:50:44,812 - pyskl - INFO - Epoch(val) [8][8]	top1_acc: 0.9253, top5_acc: 1.0000
+2023-10-02 19:51:14,278 - pyskl - INFO - Epoch [9][100/454]	lr: 4.786e-02, eta: 0:12:10, time: 0.295, data_time: 0.087, memory: 1818, top1_acc: 0.9902, top5_acc: 0.9998, loss_cls: 0.0387, loss: 0.0387
+2023-10-02 19:51:35,021 - pyskl - INFO - Epoch [9][200/454]	lr: 4.570e-02, eta: 0:11:49, time: 0.207, data_time: 0.000, memory: 1818, top1_acc: 0.9955, top5_acc: 1.0000, loss_cls: 0.0213, loss: 0.0213
+2023-10-02 19:51:55,867 - pyskl - INFO - Epoch [9][300/454]	lr: 4.355e-02, eta: 0:11:29, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9953, top5_acc: 1.0000, loss_cls: 0.0217, loss: 0.0217
+2023-10-02 19:52:16,710 - pyskl - INFO - Epoch [9][400/454]	lr: 4.141e-02, eta: 0:11:08, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9961, top5_acc: 1.0000, loss_cls: 0.0173, loss: 0.0173
+2023-10-02 19:52:28,965 - pyskl - INFO - Saving checkpoint at 9 epochs
+2023-10-02 19:52:38,740 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 19:52:38,742 - pyskl - INFO - 
+top1_acc	0.9450
+top5_acc	0.9980
+2023-10-02 19:52:38,744 - pyskl - INFO - The previous best checkpoint /home/k100/Code/pyskl/work_dirs/stgcn++/stgcn++_ITRI_YOLOv8_11cls_for_show/j/best_top1_acc_epoch_8.pth was removed
+2023-10-02 19:52:38,819 - pyskl - INFO - Now best checkpoint is saved as best_top1_acc_epoch_9.pth.
+2023-10-02 19:52:38,819 - pyskl - INFO - Best top1_acc is 0.9450 at 9 epoch.
+2023-10-02 19:52:38,819 - pyskl - INFO - Epoch(val) [9][8]	top1_acc: 0.9450, top5_acc: 0.9980
+2023-10-02 19:53:08,550 - pyskl - INFO - Epoch [10][100/454]	lr: 3.816e-02, eta: 0:10:35, time: 0.297, data_time: 0.088, memory: 1818, top1_acc: 0.9948, top5_acc: 1.0000, loss_cls: 0.0217, loss: 0.0217
+2023-10-02 19:53:29,317 - pyskl - INFO - Epoch [10][200/454]	lr: 3.607e-02, eta: 0:10:14, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9956, top5_acc: 1.0000, loss_cls: 0.0196, loss: 0.0196
+2023-10-02 19:53:50,141 - pyskl - INFO - Epoch [10][300/454]	lr: 3.400e-02, eta: 0:09:54, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9966, top5_acc: 1.0000, loss_cls: 0.0158, loss: 0.0158
+2023-10-02 19:54:11,026 - pyskl - INFO - Epoch [10][400/454]	lr: 3.197e-02, eta: 0:09:33, time: 0.209, data_time: 0.000, memory: 1818, top1_acc: 0.9962, top5_acc: 1.0000, loss_cls: 0.0169, loss: 0.0169
+2023-10-02 19:54:23,235 - pyskl - INFO - Saving checkpoint at 10 epochs
+2023-10-02 19:54:32,953 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 19:54:32,954 - pyskl - INFO - 
+top1_acc	0.9470
+top5_acc	1.0000
+2023-10-02 19:54:32,956 - pyskl - INFO - The previous best checkpoint /home/k100/Code/pyskl/work_dirs/stgcn++/stgcn++_ITRI_YOLOv8_11cls_for_show/j/best_top1_acc_epoch_9.pth was removed
+2023-10-02 19:54:33,029 - pyskl - INFO - Now best checkpoint is saved as best_top1_acc_epoch_10.pth.
+2023-10-02 19:54:33,030 - pyskl - INFO - Best top1_acc is 0.9470 at 10 epoch.
+2023-10-02 19:54:33,030 - pyskl - INFO - Epoch(val) [10][8]	top1_acc: 0.9470, top5_acc: 1.0000
+2023-10-02 19:55:02,860 - pyskl - INFO - Epoch [11][100/454]	lr: 2.891e-02, eta: 0:09:00, time: 0.298, data_time: 0.091, memory: 1818, top1_acc: 0.9984, top5_acc: 1.0000, loss_cls: 0.0094, loss: 0.0094
+2023-10-02 19:55:23,618 - pyskl - INFO - Epoch [11][200/454]	lr: 2.697e-02, eta: 0:08:40, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9991, top5_acc: 1.0000, loss_cls: 0.0076, loss: 0.0076
+2023-10-02 19:55:44,468 - pyskl - INFO - Epoch [11][300/454]	lr: 2.507e-02, eta: 0:08:19, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9998, top5_acc: 1.0000, loss_cls: 0.0046, loss: 0.0046
+2023-10-02 19:56:05,289 - pyskl - INFO - Epoch [11][400/454]	lr: 2.322e-02, eta: 0:07:59, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9998, top5_acc: 1.0000, loss_cls: 0.0039, loss: 0.0039
+2023-10-02 19:56:17,575 - pyskl - INFO - Saving checkpoint at 11 epochs
+2023-10-02 19:56:27,569 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 19:56:27,569 - pyskl - INFO - 
+top1_acc	0.9627
+top5_acc	0.9980
+2023-10-02 19:56:27,571 - pyskl - INFO - The previous best checkpoint /home/k100/Code/pyskl/work_dirs/stgcn++/stgcn++_ITRI_YOLOv8_11cls_for_show/j/best_top1_acc_epoch_10.pth was removed
+2023-10-02 19:56:27,643 - pyskl - INFO - Now best checkpoint is saved as best_top1_acc_epoch_11.pth.
+2023-10-02 19:56:27,643 - pyskl - INFO - Best top1_acc is 0.9627 at 11 epoch.
+2023-10-02 19:56:27,643 - pyskl - INFO - Epoch(val) [11][8]	top1_acc: 0.9627, top5_acc: 0.9980
+2023-10-02 19:56:57,561 - pyskl - INFO - Epoch [12][100/454]	lr: 2.047e-02, eta: 0:07:26, time: 0.299, data_time: 0.089, memory: 1818, top1_acc: 0.9994, top5_acc: 1.0000, loss_cls: 0.0057, loss: 0.0057
+2023-10-02 19:57:18,477 - pyskl - INFO - Epoch [12][200/454]	lr: 1.875e-02, eta: 0:07:06, time: 0.209, data_time: 0.000, memory: 1818, top1_acc: 0.9995, top5_acc: 1.0000, loss_cls: 0.0045, loss: 0.0045
+2023-10-02 19:57:39,449 - pyskl - INFO - Epoch [12][300/454]	lr: 1.709e-02, eta: 0:06:45, time: 0.210, data_time: 0.000, memory: 1818, top1_acc: 0.9995, top5_acc: 1.0000, loss_cls: 0.0054, loss: 0.0054
+2023-10-02 19:58:00,336 - pyskl - INFO - Epoch [12][400/454]	lr: 1.550e-02, eta: 0:06:25, time: 0.209, data_time: 0.000, memory: 1818, top1_acc: 0.9992, top5_acc: 1.0000, loss_cls: 0.0058, loss: 0.0058
+2023-10-02 19:58:12,633 - pyskl - INFO - Saving checkpoint at 12 epochs
+2023-10-02 19:58:22,305 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 19:58:22,306 - pyskl - INFO - 
+top1_acc	0.9705
+top5_acc	0.9980
+2023-10-02 19:58:22,309 - pyskl - INFO - The previous best checkpoint /home/k100/Code/pyskl/work_dirs/stgcn++/stgcn++_ITRI_YOLOv8_11cls_for_show/j/best_top1_acc_epoch_11.pth was removed
+2023-10-02 19:58:22,408 - pyskl - INFO - Now best checkpoint is saved as best_top1_acc_epoch_12.pth.
+2023-10-02 19:58:22,408 - pyskl - INFO - Best top1_acc is 0.9705 at 12 epoch.
+2023-10-02 19:58:22,408 - pyskl - INFO - Epoch(val) [12][8]	top1_acc: 0.9705, top5_acc: 0.9980
+2023-10-02 19:58:52,396 - pyskl - INFO - Epoch [13][100/454]	lr: 1.316e-02, eta: 0:05:53, time: 0.300, data_time: 0.091, memory: 1818, top1_acc: 0.9995, top5_acc: 1.0000, loss_cls: 0.0047, loss: 0.0047
+2023-10-02 19:59:13,199 - pyskl - INFO - Epoch [13][200/454]	lr: 1.174e-02, eta: 0:05:32, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9995, top5_acc: 1.0000, loss_cls: 0.0046, loss: 0.0046
+2023-10-02 19:59:34,018 - pyskl - INFO - Epoch [13][300/454]	lr: 1.038e-02, eta: 0:05:12, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9997, top5_acc: 1.0000, loss_cls: 0.0040, loss: 0.0040
+2023-10-02 19:59:54,921 - pyskl - INFO - Epoch [13][400/454]	lr: 9.099e-03, eta: 0:04:51, time: 0.209, data_time: 0.000, memory: 1818, top1_acc: 0.9998, top5_acc: 1.0000, loss_cls: 0.0030, loss: 0.0030
+2023-10-02 20:00:07,186 - pyskl - INFO - Saving checkpoint at 13 epochs
+2023-10-02 20:00:17,315 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 20:00:17,316 - pyskl - INFO - 
+top1_acc	0.9646
+top5_acc	0.9980
+2023-10-02 20:00:17,316 - pyskl - INFO - Epoch(val) [13][8]	top1_acc: 0.9646, top5_acc: 0.9980
+2023-10-02 20:00:47,174 - pyskl - INFO - Epoch [14][100/454]	lr: 7.276e-03, eta: 0:04:19, time: 0.299, data_time: 0.090, memory: 1818, top1_acc: 1.0000, top5_acc: 1.0000, loss_cls: 0.0029, loss: 0.0029
+2023-10-02 20:01:07,993 - pyskl - INFO - Epoch [14][200/454]	lr: 6.193e-03, eta: 0:03:58, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 1.0000, top5_acc: 1.0000, loss_cls: 0.0028, loss: 0.0028
+2023-10-02 20:01:28,854 - pyskl - INFO - Epoch [14][300/454]	lr: 5.191e-03, eta: 0:03:38, time: 0.209, data_time: 0.000, memory: 1818, top1_acc: 1.0000, top5_acc: 1.0000, loss_cls: 0.0027, loss: 0.0027
+2023-10-02 20:01:49,772 - pyskl - INFO - Epoch [14][400/454]	lr: 4.274e-03, eta: 0:03:17, time: 0.209, data_time: 0.000, memory: 1818, top1_acc: 0.9998, top5_acc: 1.0000, loss_cls: 0.0028, loss: 0.0028
+2023-10-02 20:02:01,963 - pyskl - INFO - Saving checkpoint at 14 epochs
+2023-10-02 20:02:11,884 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 20:02:11,885 - pyskl - INFO - 
+top1_acc	0.9666
+top5_acc	0.9980
+2023-10-02 20:02:11,885 - pyskl - INFO - Epoch(val) [14][8]	top1_acc: 0.9666, top5_acc: 0.9980
+2023-10-02 20:02:41,837 - pyskl - INFO - Epoch [15][100/454]	lr: 3.029e-03, eta: 0:02:45, time: 0.299, data_time: 0.091, memory: 1818, top1_acc: 1.0000, top5_acc: 1.0000, loss_cls: 0.0028, loss: 0.0028
+2023-10-02 20:03:02,888 - pyskl - INFO - Epoch [15][200/454]	lr: 2.332e-03, eta: 0:02:25, time: 0.210, data_time: 0.000, memory: 1818, top1_acc: 0.9997, top5_acc: 1.0000, loss_cls: 0.0031, loss: 0.0031
+2023-10-02 20:03:23,778 - pyskl - INFO - Epoch [15][300/454]	lr: 1.724e-03, eta: 0:02:04, time: 0.209, data_time: 0.000, memory: 1818, top1_acc: 1.0000, top5_acc: 1.0000, loss_cls: 0.0024, loss: 0.0024
+2023-10-02 20:03:44,597 - pyskl - INFO - Epoch [15][400/454]	lr: 1.207e-03, eta: 0:01:44, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 1.0000, top5_acc: 1.0000, loss_cls: 0.0032, loss: 0.0032
+2023-10-02 20:03:56,824 - pyskl - INFO - Saving checkpoint at 15 epochs
+2023-10-02 20:04:06,373 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 20:04:06,374 - pyskl - INFO - 
+top1_acc	0.9686
+top5_acc	0.9980
+2023-10-02 20:04:06,375 - pyskl - INFO - Epoch(val) [15][8]	top1_acc: 0.9686, top5_acc: 0.9980
+2023-10-02 20:04:36,003 - pyskl - INFO - Epoch [16][100/454]	lr: 5.882e-04, eta: 0:01:12, time: 0.296, data_time: 0.087, memory: 1818, top1_acc: 1.0000, top5_acc: 1.0000, loss_cls: 0.0030, loss: 0.0030
+2023-10-02 20:04:56,777 - pyskl - INFO - Epoch [16][200/454]	lr: 3.038e-04, eta: 0:00:52, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9998, top5_acc: 1.0000, loss_cls: 0.0029, loss: 0.0029
+2023-10-02 20:05:17,606 - pyskl - INFO - Epoch [16][300/454]	lr: 1.123e-04, eta: 0:00:31, time: 0.208, data_time: 0.000, memory: 1818, top1_acc: 0.9998, top5_acc: 1.0000, loss_cls: 0.0031, loss: 0.0031
+2023-10-02 20:05:38,518 - pyskl - INFO - Epoch [16][400/454]	lr: 1.414e-05, eta: 0:00:11, time: 0.209, data_time: 0.000, memory: 1818, top1_acc: 0.9997, top5_acc: 1.0000, loss_cls: 0.0030, loss: 0.0030
+2023-10-02 20:05:50,729 - pyskl - INFO - Saving checkpoint at 16 epochs
+2023-10-02 20:06:00,177 - pyskl - INFO - Evaluating top_k_accuracy ...
+2023-10-02 20:06:00,178 - pyskl - INFO - 
+top1_acc	0.9666
+top5_acc	0.9980
+2023-10-02 20:06:00,178 - pyskl - INFO - Epoch(val) [16][8]	top1_acc: 0.9666, top5_acc: 0.9980
+2023-10-02 20:06:03,405 - pyskl - INFO - 509 videos remain after valid thresholding
+2023-10-02 20:06:17,057 - pyskl - INFO - Testing results of the last checkpoint
+2023-10-02 20:06:17,058 - pyskl - INFO - top1_acc: 0.9705
+2023-10-02 20:06:17,058 - pyskl - INFO - top5_acc: 1.0000
+2023-10-02 20:06:17,059 - pyskl - INFO - load checkpoint from local path: ./work_dirs/stgcn++/stgcn++_ITRI_YOLOv8_11cls_for_show/j/best_top1_acc_epoch_12.pth
+2023-10-02 20:06:30,756 - pyskl - INFO - Testing results of the best checkpoint
+2023-10-02 20:06:30,756 - pyskl - INFO - top1_acc: 0.9764
+2023-10-02 20:06:30,756 - pyskl - INFO - top5_acc: 1.0000

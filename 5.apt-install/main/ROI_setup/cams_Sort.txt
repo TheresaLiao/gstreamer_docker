@@ -1,0 +1,12 @@
+ROI_cam1.txt
+ROI_cam2.txt
+ROI_cam3.txt
+ROI_cam4.txt
+ROI_cam5.txt
+ROI_cam6.txt
+ROI_cam7.txt
+ROI_cam8.txt
+ROI_cam9.txt
+ROI_cam10.txt
+ROI_cam11.txt
+ROI_cam13.txt
