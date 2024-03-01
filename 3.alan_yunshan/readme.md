@@ -69,7 +69,6 @@ import cv2
 print(cv2.getBuildInformation())
 ```
 * Gstremer 的設定沒有打開，很奇怪
-![image](https://hackmd.io/_uploads/SkfVZn6np.png)
 ![alt text](../image/3_chatgpt_opencv_info.png "opencv info")
 
 
@@ -143,9 +142,8 @@ RUN make -j$(nproc) && \
     make install && \
     ldconfig
 ```
-![image](https://hackmd.io/_uploads/rkD1C2p2a.png)
-
-![image](https://hackmd.io/_uploads/ryHbxTp3T.png)
+![alt text](../image/4_alan_opencv_info.png "opencv info")
+![alt text](../image/4_alan_opencv_error.png "opencv install error")
 
 
 ## Target
