@@ -1,0 +1,54 @@
+ARG UBUNTU_RELEASE=20.04
+ARG CUDA_VERSION=11.4.2
+ARG GSTREAMER_VERSION=1.22
+
+#
+# Stage 1
+#
+#FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_RELEASE} AS gstreamer-builder
+FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
+ARG GSTREAMER_VERSION
+
+#
+# install dependencies
+ENV DEBIAN_FRONTEND=noninteractive
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+    git ninja-build cmake pkg-config libmount-dev \
+    flex bison bzip2 curl python3-pip; \
+    pip3 install meson; \
+    # minimize build by providing dev libraries
+    apt-get install -y --no-install-recommends zlib1g-dev libglib2.0-dev libffi-dev libssl-dev; \
+    # plugins dependencies: soundtouch
+    apt-get install -y --no-install-recommends libsndfile1-dev libsoundtouch-dev libvpx-dev; \
+    # plugin dependencies: pango
+    apt-get install -y --no-install-recommends libpango1.0-dev libpangocairo-1.0-0 libcairo2-dev; \
+    # plugin dependencies: vaapi
+    apt-get install -y --no-install-recommends libva-dev; \
+    #
+    # clean up
+    apt-get clean -y; \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+
+#
+# build gstreamer
+RUN set -eux; \
+    git clone https://gitlab.freedesktop.org/gstreamer/gstreamer.git /gstreamer/src --depth 1 --branch $GSTREAMER_VERSION; \
+    cd /gstreamer/src; \
+    meson --prefix=/gstreamer/install \
+        -Dgpl=enabled \
+        -Dvaapi=enabled \
+        -Drs=disabled \
+        -Dlibav=enabled \
+        -Dgst-plugins-ugly:x264=enabled \
+        -Dgst-plugins-base:pango=enabled \
+        -Ddevtools=disabled \
+        -Dtests=disabled \
+        -Dexamples=disabled \
+        -Ddoc=disabled \
+        -Dorc=disabled \
+        -Dlibsoup:sysprof=disabled \
+        -Dbuildtype=release build; \
+    ninja -C build; \
+    meson install -C build;
