@@ -1,0 +1,39 @@
+FROM gstreamer-builder:1.0 AS nn
+FROM nvidia/cuda:11.3.1-runtime-ubuntu20.04 AS final
+COPY --from=nn /gstreamer/install /opt/gstreamer
+
+#
+# install dependencies
+ENV DEBIAN_FRONTEND=noninteractive
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends tzdata; \
+    # dev versions may still be useful is image is used for dev purposes
+    apt-get install -y --no-install-recommends zlib1g-dev libglib2.0-dev libffi-dev libssl-dev; \
+    # plugins dependencies: soundtouch, opencv, nvcodec, vaapi
+    apt-get install -y --no-install-recommends libsndfile1 libsoundtouch1 libopencv-dev libegl1 libgles-dev; \
+    # dlib additionals
+    apt-get install -y --no-install-recommends libopenblas-base libopenblas-dev liblapack-dev libdlib-data; \
+    # for plugin scanner
+    apt-get install -y --no-install-recommends libpython3.7; \
+    # for CGO
+    apt-get install -y --no-install-recommends libunwind-dev libdw-dev; \
+    # plugin dependencies: pango
+    # apt-get install -y --no-install-recommends libpango1.0-dev libpangocairo-1.0-0 libcairo2-dev; \
+    #
+    # clean up
+    apt-get clean -y; \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+
+
+# are all of them needed?
+ENV PATH="${PATH}:/opt/gstreamer/bin"
+ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/gstreamer/lib/x86_64-linux-gnu"
+ENV LIBRARY_PATH="${LIBRARY_PATH}:/opt/gstreamer/lib/x86_64-linux-gnu"
+ENV PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:/opt/gstreamer/lib/x86_64-linux-gnu/pkgconfig"
+ENV CPLUS_INCLUDE_PATH="${CPLUS_INCLUDE_PATH}:/opt/gstreamer/include/gstreamer-1.0"
+ENV GST_PLUGIN_PATH=/opt/gstreamer/lib/x86_64-linux-gnu/gstreamer-1.0
+ENV GST_PLUGIN_SCANNER=/opt/gstreamer/libexec/gstreamer-1.0/gst-plugin-scanner
+ENV PYTHONPATH=opt/gstreamer/lib/python3.9/site-packages
+ENV GI_TYPELIB_PATH=/opt/gstreamer/lib/x86_64-linux-gnu/girepository-1.0/
+ENV NVIDIA_DRIVER_CAPABILITIES all
