@@ -13,7 +13,7 @@ sudo docker ps
 sudo docker exec -ti gst-cnt-cpu bash
 
 ## into container
-cd /workdir/main
+cd /home/main
 python3 testRTSP.py
 ```
 ## X86 GPU build
@@ -41,6 +41,6 @@ sudo docker ps
 sudo docker exec -ti gst-cnt-gpu bash
 
 ## into container
-cd /workdir/main
+cd /home
 python3 test_opencv_gst_gpu.py
 ```
