@@ -207,3 +207,6 @@ RUN make install
 
 WORKDIR /home
 COPY test_opencv_gst_gpu.py ./
+
+WORKDIR /home
+COPY main /home/main
