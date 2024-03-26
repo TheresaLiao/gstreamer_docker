@@ -1,12 +1,15 @@
 # How to work?
 
 ## X86 CPU build
-
+* start build image & run container
 ```
 ## WARNING : do not use root
 sudo sh run_cnt_x86_cpu.sh
-sudo docker ps
+sudo docker image
+## gst_python3_opencv:x86_cpu
 
+sudo docker ps
+## show container name: gst-cnt-cpu
 sudo docker exec -ti gst-cnt-cpu bash
 
 ## into container
@@ -26,14 +29,18 @@ gst-plugins-bad-1.19.2.tar.xz
 gst-plugins-ugly-1.19.2.tar.xz
 opencv.tgz
 ```
+* start build image & run container
 ```
 ## WARNING : do not use root
 sudo sh run_cnt_x86_gpu.sh
-sudo docker ps
+sudo docker image
+## gst_python3_opencv:x86_gpu
 
+sudo docker ps
+## show container name: gst-cnt-gpu
 sudo docker exec -ti gst-cnt-gpu bash
 
 ## into container
 cd /workdir/main
-python3 testRTSP.py
+python3 test_opencv_gst_gpu.py
 ```
