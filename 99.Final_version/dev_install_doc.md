@@ -184,6 +184,7 @@ vim /etc/ld.so.conf
 插入一行==>/usr/local/ffmpeg/lib/
 ldconfig
 
+cd opencv/opencv-4.x/
 make -j$(nproc)
 make install
 
