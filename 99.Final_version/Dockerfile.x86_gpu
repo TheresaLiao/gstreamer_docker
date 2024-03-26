@@ -204,3 +204,6 @@ RUN cmake -D CMAKE_BUILD_TYPE=RELEASE \
 WORKDIR /home/opencv/opencv-4.x/build
 RUN make -j$(nproc)
 RUN make install
+
+WORKDIR /home
+COPY test_opencv_gst_gpu.py ./
