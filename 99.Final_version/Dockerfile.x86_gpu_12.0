@@ -1,0 +1,220 @@
+FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
+
+ARG DEBIAN_FRONTEND=noninteractive
+ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
+
+## install cudnn
+WORKDIR /home
+COPY cudnn-linux-x86_64-8.9.4.25_cuda12-archive.tar.xz .
+RUN tar -xvf cudnn-linux-x86_64-8.9.4.25_cuda12-archive.tar.xz 
+RUN mv cudnn-linux-x86_64-8.9.4.25_cuda12-archive cuda
+RUN cp cuda/include/cudnn*.h /usr/local/cuda/include
+RUN cp -P cuda/lib/libcudnn* /usr/local/cuda/lib64 
+RUN chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*
+
+
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends --fix-missing \
+        autoconf \
+        automake \
+        build-essential \
+        cmake \
+        git-core \
+        libass-dev \
+        libfreetype6-dev \
+        libgnutls28-dev \
+        libmp3lame-dev \
+        libsdl2-dev \
+        libtool \
+        libva-dev \
+        libvdpau-dev \
+        libvorbis-dev \
+        libxcb1-dev \
+        libxcb-shm0-dev \
+        libxcb-xfixes0-dev \
+        meson \
+        ninja-build \
+        pkg-config \
+        texinfo \
+        wget \
+        yasm \
+        zlib1g-dev \
+        libbz2-dev \
+        liblzma-dev \
+        git \
+        vim \
+        unzip \
+        nasm
+
+RUN apt-get install -y --no-install-recommends --fix-missing \
+        ninja-build \
+        build-essential \
+        dpkg-dev \
+        flex \
+        bison \
+        autotools-dev \
+        automake \
+        liborc-dev \
+        autopoint \
+        libtool \
+        gtk-doc-tools \
+        python3-pip \
+        valgrind \
+        libgirepository1.0-dev \
+        libcap-dev \
+        libgtk-3-dev \
+        libunwind-dev \
+        clzip \
+        gobject-introspection \
+        libdw-dev \
+        libxv-dev \
+        libasound2-dev \
+        libtheora-dev \
+        libogg-dev \
+        libvorbis-dev \
+        libbz2-dev \
+        libv4l-dev \
+        libvpx-dev \
+        libjack-jackd2-dev \
+        libsoup2.4-dev \
+        libpulse-dev \
+        faad \
+        libfaad-dev \
+        libfaac-dev \
+        libx264-dev \
+        libmad0-dev \
+        yasm
+
+
+RUN pip3 uninstall opencv-python
+RUN python3 -m pip install meson==0.60.0
+RUN pip3 install requests
+
+WORKDIR /home
+COPY ffmpeg.tgz gmp-6.2.1.tar.lz gsl-latest.tar.gz gstreamer-1.19.2.tar.xz gst-plugins-base-1.19.2.tar.xz gst-plugins-good-1.19.2.tar.xz gst-plugins-bad-1.19.2.tar.xz gst-plugins-ugly-1.19.2.tar.xz ./
+
+## install ffmpeg
+WORKDIR /home
+RUN tar xvzf ffmpeg.tgz && cd ffmpeg/ &&  ./configure --enable-shared --prefix=/usr/local/ffmpeg && make &&  make install
+RUN rm -rf ffmpeg.tgz
+
+#Gstreamer
+WORKDIR /home
+RUN tar xvf gmp-6.2.1.tar.lz && cd gmp-6.2.1/ &&  ./configure && make &&  make install
+RUN rm -rf gmp-6.2.1.tar.lz
+
+WORKDIR /home
+RUN tar xvf gsl-latest.tar.gz && cd gsl-2.7.1/ &&  ./configure && make &&  make install
+RUN rm -rf gsl-latest.tar.gz
+
+WORKDIR /home
+RUN tar xvf gstreamer-1.19.2.tar.xz && cd gstreamer-1.19.2/ &&  meson build  && ninja -C build  &&  ninja -C build install
+RUN rm -rf gstreamer-1.19.2.tar.xz
+
+WORKDIR /home
+RUN tar xvf gst-plugins-base-1.19.2.tar.xz && cd gst-plugins-base-1.19.2/ &&  meson build  && ninja -C build  &&  ninja -C build install
+RUN rm -rf gst-plugins-base-1.19.2.tar.xz
+
+WORKDIR /home
+RUN tar xvf gst-plugins-good-1.19.2.tar.xz && cd gst-plugins-good-1.19.2/ &&  meson build  && ninja -C build  &&  ninja -C build install
+RUN rm -rf gst-plugins-good-1.19.2.tar.xz
+
+WORKDIR /home
+RUN tar xvf gst-plugins-bad-1.19.2.tar.xz && cd gst-plugins-bad-1.19.2/ &&  meson build  && ninja -C build  &&  ninja -C build install
+RUN rm -rf gst-plugins-bad-1.19.2.tar.xz
+
+WORKDIR /home
+RUN tar xvf gst-plugins-ugly-1.19.2.tar.xz && cd gst-plugins-ugly-1.19.2/ &&  meson build  && ninja -C build  &&  ninja -C build install
+RUN rm -rf gst-plugins-ugly-1.19.2.tar.xz
+
+WORKDIR /home
+ENV PKG_CONFIG_PATH=/home/ffmpeg/libavfilter:/home/ffmpeg/libavdevice:/home/ffmpeg/libswscale:/home/ffmpeg/libavutil:/home/ffmpeg/libavformat:/home/ffmpeg/libavcodec:/home/ffmpeg/libswresample
+COPY gst-libav-1.19.2.tar.xz ./
+RUN tar xvf gst-libav-1.19.2.tar.xz && cd gst-libav-1.19.2/ &&  meson build  && ninja -C build  &&  ninja -C build install
+RUN rm -rf gst-libav-1.19.2.tar.xz
+
+## install python
+RUN apt-get update
+RUN apt-get install -y libpython3-dev
+RUN apt-get install -y  python3-dev
+
+## install numpy
+RUN pip3 install numpy
+RUN ln -s /usr/local/lib/python3.8/dist-packages/numpy/core/include/numpy /usr/include/numpy
+
+## install opencv 4.6
+RUN echo '/usr/local/ffmpeg/lib/' >> /etc/ld.so.conf
+RUN ldconfig
+
+ENV CPLUS_INCLUDE_PATH=/usr/lib/python3.8/config-3.8-x86_64-linux-gnu
+
+WORKDIR /home
+COPY opencv-4.8.0.tar.gz opencv_contrib-4.8.0.tar.gz ./
+RUN tar xvzf opencv-4.8.0.tar.gz
+RUN tar xvzf opencv_contrib-4.8.0.tar.gz
+RUN rm -rf opencv-4.8.0.tar.gz
+RUN rm -rf opencv_contrib-4.8.0.tar.gz
+
+WORKDIR /home
+RUN mkdir opencv && mv opencv_contrib-4.8.0 /home/opencv/opencv_contrib-4.x && mv opencv-4.8.0 /home/opencv/opencv-4.x
+WORKDIR /home/opencv/opencv-4.x
+RUN mkdir build
+
+WORKDIR /home/opencv/opencv-4.x/build
+RUN cmake -D CMAKE_BUILD_TYPE=RELEASE \
+        -D CMAKE_INSTALL_PREFIX=/usr/local \
+        -D INSTALL_PYTHON_EXAMPLES=ON \
+        -D INSTALL_C_EXAMPLES=OFF \
+        -D BUILD_DOCS=OFF \
+        -D BUILD_PERF_TESTS=OFF \
+        -D BUILD_TESTS=OFF \
+        -D BUILD_PACKAGE=OFF \
+        -D BUILD_EXAMPLES=OFF \
+        -D WITH_TBB=ON \
+        -D ENABLE_FAST_MATH=1 \
+        -D CUDA_FAST_MATH=1 \
+        -D CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda \
+        -D WITH_CUDA=ON \
+        -D WITH_CUBLAS=ON \
+        -D WITH_CUFFT=ON \
+        -D WITH_NVCUVID=ON \
+        -D WITH_IPP=OFF \
+        -D WITH_V4L=ON \
+        -D WITH_1394=OFF \
+        -D WITH_GTK=ON \
+        -D WITH_QT=OFF \
+        -D WITH_OPENGL=OFF \
+        -D WITH_EIGEN=ON \
+        -D WITH_FFMPEG=ON \
+        -D WITH_GSTREAMER=ON \
+        -D BUILD_JAVA=OFF \
+        -D BUILD_opencv_python3=ON \
+        -D BUILD_opencv_python2=OFF \
+        -D BUILD_NEW_PYTHON_SUPPORT=ON \
+        -D OPENCV_SKIP_PYTHON_LOADER=ON \
+        -D OPENCV_GENERATE_PKGCONFIG=ON \
+        -D OPENCV_ENABLE_NONFREE=ON \
+        -D OPENCV_EXTRA_MODULES_PATH=/home/opencv/opencv_contrib-4.x/modules \
+        -D WITH_CUDNN=ON \
+        -D OPENCV_DNN_CUDA=ON \
+        -D CUDA_ARCH_BIN=7.5 \
+        -D CUDA_ARCH_PTX=7.5 \
+        -D CUDNN_LIBRARY=/usr/local/cuda/lib64/libcudnn.so \
+        -D PYTHON3_INCLUDE_DIR=$(python3 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") \
+        -D PYTHON3_NUMPY_INCLUDE_DIRS=/usr/lib/python3/dist-packages/numpy/core/include \
+        -D PYTHON3_PACKAGES_PATH=/usr/lib/python3/dist-packages \
+        -D PYTHON3_LIBRARY=/usr/lib/python3.8/config-3.8-x86_64-linux-gnu \
+        -D PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3 \
+        -D PYTHON3_EXECUTABLE=$(which python3) \
+        -D PYTHON_EXECUTABLE=$(which python3) \
+        -D CUDNN_INCLUDE_DIR=/usr/local/cuda/include ..
+
+WORKDIR /home/opencv/opencv-4.x/build
+RUN make -j$(nproc)
+RUN make install
+
+WORKDIR /home
+COPY test_opencv_gst_gpu.py ./
+
+WORKDIR /home
+COPY main /home/main
