@@ -1,7 +1,7 @@
 docker stop gst-cnt-gpu
 docker rm gst-cnt-gpu
 
-docker build -t gst_python3_opencv:x86_gpu -f Dockerfile.x86_gpu .
+docker build -t gst_python3_opencv:x86_gpu -f Dockerfile.x86_gpu_11_3 .
 
 xhost +local:docker
 docker run -ti -d \
