@@ -1,0 +1,32 @@
+FROM gst_python3_opencv:x86_gpu_12_0
+ 
+WORKDIR /home
+RUN wget -c https://download.pytorch.org/whl/cu113/torch-1.10.1%2Bcu113-cp38-cp38-linux_x86_64.whl
+RUN pip install torch-1.10.1+cu113-cp38-cp38-linux_x86_64.whl
+RUN rm -rf torch-1.10.1+cu113-cp38-cp38-linux_x86_64.whl
+
+RUN wget -c https://download.pytorch.org/whl/cu113/torchaudio-0.10.1%2Bcu113-cp38-cp38-linux_x86_64.whl#sha256=1b3fa63f9c8b2951c376ff8c51ec4019999f12ab81146c80f16112e7830bbe3d
+RUN pip install torchaudio-0.10.1+cu113-cp38-cp38-linux_x86_64.whl
+RUN rm -rf torchaudio-0.10.1+cu113-cp38-cp38-linux_x86_64.whl
+
+RUN wget -c https://download.pytorch.org/whl/cu113/torchvision-0.11.2%2Bcu113-cp38-cp38-linux_x86_64.whl#sha256=bae71da2e1444fe22acf8fd7f08ac4f821fb056d45e6e5da69b52c9788a0f8aa
+RUN pip install torchvision-0.11.2+cu113-cp38-cp38-linux_x86_64.whl
+RUN rm -rf torchvision-0.11.2+cu113-cp38-cp38-linux_x86_64.whl
+
+RUN wget -c https://download.openmmlab.com/mmcv/dist/cu101/torch1.7.0/mmcv_full-1.7.1-cp38-cp38-manylinux1_x86_64.whl
+RUN pip install mmcv_full-1.7.1-cp38-cp38-manylinux1_x86_64.whl
+RUN rm -rf mmcv_full-1.7.1-cp38-cp38-manylinux1_x86_64.whl
+
+RUN pip install openmim
+RUN pip install setuptools==59.5.0
+RUN pip install shapely
+RUN pip install pika
+
+RUN pip install scipy fvcore seaborn pytorch-lightning==1.1.4  einops joblib timm thop yacs==0.1.8
+
+WORKDIR /home
+COPY main ./
+
+WORKDIR /home/main
+RUN pip install -e .
+RUN pip uninstall opencv-python
